@@ -3,19 +3,19 @@ import './searchForm.css';
 
 const SearchForm=()=>{
 let [searchedInput,setSearchedInput]=useState("");
-const handleOnChange = (e) => {
+const handleSearch = (e) => {
     setSearchedInput(e.target.value);
 };
-const onSearch=(e)=>{
+const handleSubmitSearch=(e)=>{
     e.preventDefault();
     console.log(searchedInput)
     setSearchedInput("");
 }
 return (
     <div>
-        <form className="form" onSubmit={onSearch}>
-        <input className="search-box" value={searchedInput} placeholder="Search Movies" onChange={handleOnChange}/>
-        <button className="btn-submit" onClick={onSearch}>Search</button>
+        <form className="form" onSubmit={handleSubmitSearch}>
+        <input className="search-box" value={searchedInput} placeholder="Search Movies" onChange={handleSearch}/>
+        <button className="btn-submit" onClick={handleSubmitSearch}>Search</button>
         </form>
     </div>
 )
