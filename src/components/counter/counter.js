@@ -5,22 +5,22 @@ class Counter extends React.Component {
     constructor(props){  
         super(props)    
         this.state = {count : 0}  
-        this.incrementCount = this.incrementCount.bind(this)
-        this.decrementCount = this.decrementCount.bind(this) 
+        this.handleIncrement = this.handleIncrement.bind(this)
+        this.handleDecrement = this.handleDecrement.bind(this) 
       }  
         
-      incrementCount(){  
+      handleIncrement(){  
         this.setState(prevState => { return {count: prevState.count + 1} });
       } 
-      decrementCount(){  
+      handleDecrement(){  
         this.setState(prevState => { return {count: prevState.count - 1} });
       }  
     render() {
       return (
         <div className="counter-container">
-        <button className="decrement" onClick={this.decrementCount}>-</button>
+        <button className="decrement" onClick={this.handleDecrement}>-</button>
         <div className="number">{this.state.count}</div>
-        <button className="increment" onClick={this.incrementCount}>+</button>
+        <button className="increment" onClick={this.handleIncrement}>+</button>
     </div>
       );
     }
