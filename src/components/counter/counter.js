@@ -1,5 +1,6 @@
 import React from 'react';
 import './counter.css';
+
 class Counter extends React.Component {
     constructor(props){  
         super(props)    
@@ -9,14 +10,10 @@ class Counter extends React.Component {
       }  
         
       incrementCount(){  
-        let i=this.state.count;
-        i++;
-        this.setState({count : i})  
+        this.setState(prevState => { return {count: prevState.count + 1} });
       } 
       decrementCount(){  
-        let i=this.state.count;
-        i--;
-        this.setState({count : i})  
+        this.setState(prevState => { return {count: prevState.count - 1} });
       }  
     render() {
       return (

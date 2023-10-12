@@ -1,5 +1,6 @@
 import { useState } from "react";
 import './searchForm.css';
+
 const SearchForm=()=>{
 let [searchedInput,setSearchedInput]=useState("");
 const handleOnChange = (e) => {
@@ -13,7 +14,7 @@ const onSearch=(e)=>{
 return (
     <div>
         <form className="form" onSubmit={onSearch}>
-        <input className="searchBox" value={searchedInput} placeholder="Search Movies" onChange={handleOnChange}/>
+        <input className="search-box" value={searchedInput} placeholder="Search Movies" onChange={handleOnChange}/>
         <button className="btn-submit" onClick={onSearch}>Search</button>
         </form>
     </div>
