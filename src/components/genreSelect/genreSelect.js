@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import GenreList from '../genreList/genreList';
 
-function GenreSelect() {
-  const [selectedGenre, setSelectedGenre] = useState('');
-
-  const genres = ['Action', 'Comedy', 'Drama', 'Science Fiction', 'Horror'];
-
+function GenreSelect({genres,selectedGenre,onChange}) {
+  const [newselectedGenre, setSelectedGenre] = useState(selectedGenre);
   const handleGenreSelect = (genre) => {
     setSelectedGenre(genre);
+    onChange(genre);
   };
 
   return (
-    <div>
-      <GenreList genres={genres} selectedGenre={selectedGenre} onSelect={handleGenreSelect} />
-      <p>Selected Genre: {selectedGenre}</p>
-    </div>
+    <>
+      <GenreList genres={genres} selectedGenre={newselectedGenre} onChange={handleGenreSelect} />
+      <p>Selected Genre: {newselectedGenre}</p>
+    </>
   );
 }
 
