@@ -12,14 +12,15 @@ const setup = (genres, selectedGenre) => {
         onChange={genreSelectCB}></GenreSelect>);
     return { ...utils };
 }
+describe('Test Genre Select Component', () => {
+    test('check if the genre select is rendered with initial values', () => {
+        setup(["Drama", "Horror"], "Drama");
+        expect(screen.getByText("Drama")).not.toBeNull();
+    })
 
-test('check if the genre select is rendered with initial values', () => {
-    setup(["Drama", "Horror"], "Drama");
-    expect(screen.getByText("Drama")).not.toBeNull();
-})
-
-test('check if the selected genre is highlighted', () => {
-    setup(["Drama", "Horror"], "Drama");
-    fireEvent.click(screen.getByText("Horror"));
-    expect(genreSelectCB).toBeCalledWith("Horror");
+    test('check if the selected genre is highlighted', () => {
+        setup(["Drama", "Horror"], "Drama");
+        fireEvent.click(screen.getByText("Horror"));
+        expect(genreSelectCB).toBeCalledWith("Horror");
+    })
 })
