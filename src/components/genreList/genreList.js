@@ -1,6 +1,6 @@
 import React from 'react';
 
-function GenreList({ genres, selectedGenre, onSelect }) {
+function GenreList({ genres, selectedGenre, onChange }) {
   return (
     <div>
       <h2>Movie Genres:</h2>
@@ -8,7 +8,7 @@ function GenreList({ genres, selectedGenre, onSelect }) {
         <button
           key={genre}
           className={genre === selectedGenre ? 'selected' : ''}
-          onClick={() => onSelect(genre)}
+          onClick={() => onChange(genre)}
         >
           {genre}
         </button>

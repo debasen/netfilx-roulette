@@ -4,7 +4,7 @@ import './counter.css';
 class Counter extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { count: 0 }
+    this.state = { count: props.initialCount }
     this.handleIncrement = this.handleIncrement.bind(this)
     this.handleDecrement = this.handleDecrement.bind(this)
   }

@@ -1,20 +1,19 @@
 import { useState } from "react";
 import './searchForm.css';
 
-const SearchForm = () => {
-    let [searchedInput, setSearchedInput] = useState("");
+const SearchForm = (props) => {
+    let [searchedInput, setSearchedInput] = useState(props.initialSearchTerm);
     const handleSearch = (e) => {
         setSearchedInput(e.target.value);
     };
     const handleSubmitSearch = (e) => {
         e.preventDefault();
-        console.log(searchedInput)
-        setSearchedInput("");
+        props.onChange(searchedInput);
     }
     return (
         <div>
             <form className="form" onSubmit={handleSubmitSearch}>
-                <input className="search-box" value={searchedInput} placeholder="Search Movies" onChange={handleSearch} />
+                <input className="search-box" aria-label="search-box" value={searchedInput} placeholder="Search Movies" onChange={handleSearch} />
                 <button className="btn-submit" onClick={handleSubmitSearch}>Search</button>
             </form>
         </div>
