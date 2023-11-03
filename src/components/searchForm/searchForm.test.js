@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 
-import * as React from 'react'
+import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import SearchForm from './searchForm';
 
