@@ -1,0 +1,40 @@
+@import '../../styles/variables';
+
+.movie-card {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: $primary-color;
+}
+
+.movie-poster {
+    flex: 1;
+}
+
+.movie-poster img {
+    max-width: 100%;
+    height: auto;
+}
+
+.movie-info {
+    flex: 2;
+    padding: 20px;
+}
+
+.movie-tagline {
+    font-style: italic;
+    color: #888;
+    padding-bottom: 10px;
+}
+
+.movie-details p {
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+.movie-details strong {
+    font-weight: bold;
+}
+
+  

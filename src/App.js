@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
-import './App.css';
+import './App.scss';
 import SearchForm from './components/searchForm/searchForm';
 import GenreSelect from './components/genreSelect/genreSelect';
 import Counter from './components/counter/counter';
@@ -9,6 +9,7 @@ import MovieTile from './components/movieTile/movieTile';
 import MovieDetails from './components/movieDetails/movieDetails';
 import SortControl from './components/sortControl/sortControl';
 import { INITAL_COUNT, INITAL_SEARCH_TERM } from './constants';
+import Dialog from './components/dialog/dialog';
 ;
 function App() {
   const [data, setData] = useState([]);
@@ -59,21 +60,22 @@ function App() {
   }
 
   return (
-    <div>
+    <div className='app-container'>
       <SearchForm initialSearchTerm={INITAL_SEARCH_TERM} onChange={handleSearch} />
       <GenreSelect genres={genres} selectedGenre={selectedGenre} onChange={handleGenreSelect} />
-      <Counter initialCount={INITAL_COUNT} />
+      {/* <Counter initialCount={INITAL_COUNT} /> */}
       <SortControl currentSelection={selectedSortby} handleSelectChange={handleSelectChange} />
       {!loading ?
-        (<div>
+        (<div className='movie-tile-container'>
           {data.data.map((movie) => {
-            // console.log(movie);
             return <MovieTile key={movie.id} movie={movie} onClick={onMovieClick} />;
           })}
         </div>) :
         (<div>Loading...</div>)
       }
-      <MovieDetails isOpen={isModalOpen} onClose={closeModal} movie={selectedMovie} />
+      <Dialog isOpen={isModalOpen} onClose={closeModal}>
+        {selectedMovie && <MovieDetails movie={selectedMovie}></MovieDetails>}
+      </Dialog>
     </div>
   );
 }

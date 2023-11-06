@@ -1,5 +1,5 @@
 import { useState } from "react";
-import './searchForm.css';
+import './searchForm.scss';
 
 const SearchForm = (props) => {
     let [searchedInput, setSearchedInput] = useState(props.initialSearchTerm);
@@ -11,12 +11,15 @@ const SearchForm = (props) => {
         props.onChange(searchedInput);
     }
     return (
-        <div>
+        <div className="search-container">
+            <div className="search-banner">
+            </div>
             <form className="form" onSubmit={handleSubmitSearch}>
-                <input className="search-box" aria-label="search-box" value={searchedInput} placeholder="Search Movies" onChange={handleSearch} />
-                <button className="btn-submit" onClick={handleSubmitSearch}>Search</button>
+                <input className="search-box" aria-label="search-box" value={searchedInput} placeholder="What do you want to watch" onChange={handleSearch} />
+                <button className="btn-submit" onClick={handleSubmitSearch}>SEARCH</button>
             </form>
         </div>
+
     )
 }
 export default SearchForm;

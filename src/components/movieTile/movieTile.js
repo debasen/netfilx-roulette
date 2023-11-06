@@ -1,4 +1,4 @@
-import './movieTile.css';
+import './movieTile.scss';
 
 const MovieTile = ({ movie, onClick }) => {
     let { poster_path: imageUrl, title: movieName, release_date: releaseDate, genres } = movie;
@@ -10,15 +10,14 @@ const MovieTile = ({ movie, onClick }) => {
             <div className="movie-poster">
                 <img src={imageUrl} alt={movieName} />
             </div>
-            <div className="movie-details">
-                <h2 className="movie-title">{movieName}</h2>
-                <p className="release-year">Release Year:{releaseDate}</p>
-                <ul className="genre-list">{
-                    genres.map((genre) => {
-                        return <li key={genre} className="genre">{genre}</li>
-                    })
-                }
-                </ul>
+            <div className="movie-tile-details">
+                <div className="movie-details-left">
+                    <p className="movie-title">{movieName}</p>
+                    <p className='movie-tile-genre'>{genres.join(', ')}</p>
+                </div>
+                <div className="movie-details-right">
+                    <p className="movie-tile-release-year">{releaseDate.split('-')[0]}</p>
+                </div>
             </div>
             <button className="menu-button">⋮</button>
         </div>
