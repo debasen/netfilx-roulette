@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
-import './App.css';
+
 import SearchForm from './components/searchForm/searchForm';
 import GenreSelect from './components/genreSelect/genreSelect';
 import Counter from './components/counter/counter';
@@ -9,9 +8,10 @@ import MovieTile from './components/movieTile/movieTile';
 import MovieDetails from './components/movieDetails/movieDetails';
 import SortControl from './components/sortControl/sortControl';
 import { INITAL_COUNT, INITAL_SEARCH_TERM } from './constants';
-;
+import './App.css';
+
 function App() {
-  const [data, setData] = useState([]);
+  const [movieData, setMovieData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMovie, setselectedMovie] = useState(null);
@@ -45,7 +45,7 @@ function App() {
   useEffect(() => {
     axios.get(getMoviesUrl)
       .then((response) => {
-        setData(response.data);
+        setMovieData(response.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -66,7 +66,7 @@ function App() {
       <SortControl currentSelection={selectedSortby} handleSelectChange={handleSelectChange} />
       {!loading ?
         (<div>
-          {data.data.map((movie) => {
+          {movieData.data.map((movie) => {
             // console.log(movie);
             return <MovieTile key={movie.id} movie={movie} onClick={onMovieClick} />;
           })}
