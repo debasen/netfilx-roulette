@@ -9,6 +9,7 @@ const Dialog = (props) => {
                     <span className="close" onClick={() => props.onClose()}>&times;</span>
                 </div>
                 <div className="modal-body">
+                <div className="modal-title">{props.title}</div>
                     {props.children}
                 </div>
             </div>

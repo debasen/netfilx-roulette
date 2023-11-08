@@ -3,6 +3,7 @@
 .movie-tile {
   max-width: 250px;
   cursor: pointer;
+  position: relative;
 }
 
 .movie-poster img {
@@ -24,11 +25,31 @@
 }
 
 .menu-button {
-  flex: 0.2;
+  position: absolute;
+  top: 10px;
+  right: 10px;
   font-size: 1.5em;
   cursor: pointer;
   background: none;
   border: none;
+  color: $primary-color;
+}
+
+.context-menu {
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  background: $dark-label-color;
+  border-radius: 4px;
+
+  .menu-item {
+    width: 100%;
+    padding: 10px 20px;
+  }
+
+  .menu-item:hover {
+    background-color: $icon-color;
+  }
 }
 
 .movie-tile-release-year {
@@ -36,4 +57,21 @@
   border-radius: 4px;
   padding: 2px 10px;
   font-size: .75rem;
+}
+
+.delete-action {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  margin-top: 20px;
+
+  button {
+    background-color: $icon-color;
+    color: $primary-color;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
 }

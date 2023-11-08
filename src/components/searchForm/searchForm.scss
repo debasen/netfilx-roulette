@@ -20,7 +20,7 @@
   opacity: .3;
 }
 
-form {
+.search-form {
   display: flex;
   align-items: center;
   margin: 10px;
@@ -29,7 +29,6 @@ form {
   top: 50%;
   left: 50%;
   translate: -50% -50%;
-  opacity: .7;
 }
 
 /* Style for the search input */
@@ -42,6 +41,7 @@ form {
   margin-right: 10px;
   background-color: $background-color;
   color: white;
+  opacity: .7;
 }
 
 /* Style for the search button */

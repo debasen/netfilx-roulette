@@ -16,7 +16,7 @@ const SearchForm = (props) => {
             <AddMovie />
             <div className="search-banner">
             </div>
-            <form className="form" onSubmit={handleSubmitSearch}>
+            <form className="search-form" onSubmit={handleSubmitSearch}>
                 <input className="search-box" aria-label="search-box" value={searchedInput} placeholder="What do you want to watch" onChange={handleSearch} />
                 <button className="btn-submit" onClick={handleSubmitSearch}>SEARCH</button>
             </form>

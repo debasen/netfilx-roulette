@@ -1,1 +1,1 @@
-export const INITAL_SEARCH_TERM = 'Movie';
+export const INITAL_SEARCH_TERM = '';

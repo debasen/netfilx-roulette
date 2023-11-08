@@ -13,7 +13,7 @@ const MovieDetails = ({ movie }) => {
                     <p><strong>Release Date: </strong>{movie.release_date}</p>
                     <p><strong>Runtime: </strong>{movie.runtime}</p>
                     <p><strong>Genres: </strong>{movie.genres.map((genre) => {
-                        return <span className="genre"> {genre}{movie.genres.indexOf(genre) < movie.genres.length - 1 ? "," : "."} </span>
+                        return <span key={genre} className="genre"> {genre}{movie.genres.indexOf(genre) < movie.genres.length - 1 ? "," : "."} </span>
                     })}</p>
                     <p><strong>Overview: </strong>{movie.overview}</p>
                     <p><strong>Budget: </strong>${movie.budget}</p>

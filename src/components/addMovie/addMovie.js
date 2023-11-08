@@ -14,7 +14,7 @@ export const AddMovie = () => {
     >
       + ADD MOVIE
     </button>
-    <Dialog isOpen={isOpen} onClose={() => setOpen(false)}>
+    <Dialog title='ADD MOVIE' isOpen={isOpen} onClose={() => setOpen(false)}>
       <MovieForm onSubmit={addMovie}></MovieForm>
     </Dialog>
   </>)
