@@ -1,0 +1,71 @@
+@import '../../styles/variables';
+
+.select-container {
+  display: inline-block;
+  position: relative;
+}
+
+.select {
+  appearance: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px 20px 8px 10px;
+  font-size: 16px;
+  width: 200px;
+  cursor: pointer;
+}
+.select-sort-by {
+  appearance: none;
+  background-color: transparent;
+  border: 1px transparent;
+  border-radius: 4px;
+  padding:9px;
+  font-size: 1rem;
+  font-family: inherit;
+  width: 200px;
+  cursor: pointer;
+  color: $primary-color;
+}
+/* Dropdown arrow style */
+.select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid $icon-color;
+}
+
+.select:focus {
+  outline: none;
+  box-shadow: 0 0 4px rgba(235, 0, 0, 0.3);
+}
+
+.select-options {
+  position: absolute;
+  background-color: $background-color;
+  top: 100%;
+  left: 0;
+  display: none;
+  border: 1px transparent;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(51, 51, 51, 0.1);
+  z-index: 1;
+}
+
+.select:focus+.select-options {
+  display: block;
+}
+
+.option {
+  background-color: $background-color;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.optionSelected{
+  color: $primary-color;
+  background-color: $background-color;
+}

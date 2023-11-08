@@ -1,5 +1,6 @@
 import { useState } from "react";
 import './searchForm.scss';
+import { AddMovie } from "../addMovie/addMovie";
 
 const SearchForm = (props) => {
     let [searchedInput, setSearchedInput] = useState(props.initialSearchTerm);
@@ -12,6 +13,7 @@ const SearchForm = (props) => {
     }
     return (
         <div className="search-container">
+            <AddMovie />
             <div className="search-banner">
             </div>
             <form className="form" onSubmit={handleSubmitSearch}>

@@ -61,14 +61,26 @@ function App() {
   return (
     <div className='app-container'>
       <SearchForm initialSearchTerm={INITAL_SEARCH_TERM} onChange={handleSearch} />
-      <GenreSelect genres={genres} selectedGenre={selectedGenre} onChange={handleGenreSelect} />
+      <div className="movie-genre-sort-by-container">
+        <div className='genreSelectContainer'>
+        <GenreSelect genres={genres} selectedGenre={selectedGenre} onChange={handleGenreSelect} />
+        </div>
+        <div></div>
+        <div className='sortByContainer'>
+        <SortControl currentSelection={selectedSortby} handleSelectChange={handleSelectChange} />
+        </div>
+       </div>
+      
       {/* <Counter initialCount={INITAL_COUNT} /> */}
-      <SortControl currentSelection={selectedSortby} handleSelectChange={handleSelectChange} />
+      <span className="bold-br"></span>
       {!loading ?
-        (<div className='movie-tile-container'>
+        (<div>
+          <p className='movie-count'><b>{movieData.data.length}</b> movies found</p>
+        <div className='movie-tile-container'>
           {movieData.data.map((movie) => {
             return <MovieTile key={movie.id} movie={movie} onClick={onMovieClick} />;
           })}
+        </div>
         </div>) :
         (<div>Loading...</div>)
       }

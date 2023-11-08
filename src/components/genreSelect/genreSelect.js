@@ -11,7 +11,6 @@ function GenreSelect({genres,selectedGenre,onChange}) {
   return (
     <>
       <GenreList genres={genres} selectedGenre={newselectedGenre} onChange={handleGenreSelect} />
-      <p>Selected Genre: {newselectedGenre}</p>
     </>
   );
 }
