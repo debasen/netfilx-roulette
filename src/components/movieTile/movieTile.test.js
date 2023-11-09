@@ -1,34 +1,47 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import MovieTile from './movieTile';
 
-const sampleMovie = {
-  id: 123,
-  title: 'Sample Movie',
-  poster_path: 'sample-image-url.jpg',
-  release_date: '2023-01-01',
-  genres: ['Action', 'Adventure', 'Sci-Fi'],
+const mockMovie = {
+    poster_path: 'path/to/image.jpg',
+    title: 'Test Movie',
+    release_date: '2023-01-01',
+    genres: ['Action', 'Drama'],
 };
-describe('Test MovieTile component', () => {
-  test('it renders the MovieTile component', () => {
-    render(<MovieTile movie={sampleMovie} onClick={() => { }} />);
 
-    const titleElement = screen.getByText('Sample Movie');
-    const genreElements = screen.getAllByRole('listitem');
-    const menuButtonElement = screen.getByText('⋮');
+describe('MovieTile Component', () => {
+    test('renders movie details correctly', () => {
+        const { getByText, getByAltText } = render(<MovieTile movie={mockMovie} onClick={() => {}} />);
 
-    expect(titleElement).toBeInTheDocument();
-    expect(genreElements.length).toBe(3); // There should be 3 genre list items
-    expect(menuButtonElement).toBeInTheDocument();
-  });
+        expect(getByAltText('Test Movie')).toBeInTheDocument();
+        expect(getByText('Test Movie')).toBeInTheDocument();
+        expect(getByText('Action, Drama')).toBeInTheDocument();
+        expect(getByText('2023')).toBeInTheDocument();
+    });
 
-  test('it calls the onClick function when clicked', () => {
-    const onClick = jest.fn();
-    render(<MovieTile movie={sampleMovie} onClick={onClick} />);
+    test('calls onClick prop when clicked', () => {
+        const onClickMock = jest.fn();
+        const { getByText } = render(<MovieTile movie={mockMovie} onClick={onClickMock} />);
 
-    const movieTileElement = screen.getByText('Sample Movie');
-    fireEvent.click(movieTileElement);
+        fireEvent.click(getByText('Test Movie'));
+        expect(onClickMock).toHaveBeenCalledWith(mockMovie);
+    });
 
-    expect(onClick).toHaveBeenCalledWith(sampleMovie);
-  });
-})
+    test('opens edit modal when "Edit" is clicked', () => {
+        const { getByText, getByTestId } = render(<MovieTile movie={mockMovie} onClick={() => {}} />);
+
+        fireEvent.click(getByText('⋮'));
+        fireEvent.click(getByText('Edit'));
+
+        expect(getByTestId('modal')).toBeInTheDocument();
+    });
+
+    test('opens delete modal when "Delete" is clicked', () => {
+        const { getByText, getByTestId } = render(<MovieTile movie={mockMovie} onClick={() => {}} />);
+
+        fireEvent.click(getByText('⋮'));
+        fireEvent.click(getByText('Delete'));
+
+        expect(getByTestId('modal')).toBeInTheDocument();
+    });
+});

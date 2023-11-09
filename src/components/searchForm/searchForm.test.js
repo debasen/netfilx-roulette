@@ -1,36 +1,31 @@
-import '@testing-library/jest-dom'
-
-import React from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
 import SearchForm from './searchForm';
 
-const searchCB = jest.fn();
-const setup = (initialValue) => {
-    const utils = render(<SearchForm initialSearchTerm={initialValue} onChange={searchCB}></SearchForm>);
-    const searchInput = screen.getByLabelText('search-box');
-    return { ...utils, searchInput };
-}
+describe('SearchForm Component', () => {
+    const mockProps = {
+        initialSearchTerm: 'Initial Term',
+        onChange: jest.fn(),
+    };
 
-describe('Test Search Component', () => {
-    test('check if the search box is rendered with inital value', () => {
-        const { searchInput } = setup("Some Movie");
-        expect(searchInput.value).toBe("Some Movie");
-    })
-    test('check onChange event', () => {
-        setup("Search Term");
-        fireEvent.click(screen.getByText('Search'));
-        expect(searchCB).toBeCalledWith("Search Term");
-    })
-    test('check user input', () => {
-        const { searchInput } = setup();
-        fireEvent.change(searchInput, { target: { value: 'New Movie' } });
-        fireEvent.click(screen.getByText('Search'));
-        expect(searchCB).toBeCalledWith('New Movie');
-    })
-    test('check user input with enter key', () => {
-        const { searchInput } = setup();
-        fireEvent.change(searchInput, { target: { value: 'New Movie' } });
-        fireEvent.submit(searchInput);
-        expect(searchCB).toBeCalledWith('New Movie');
-    })
-})
+    it('renders with initial search term and calls onChange prop on submit', () => {
+        const { getByLabelText, getByText } = render(<SearchForm {...mockProps} />);
+
+        const searchBox = getByLabelText('search-box');
+        const submitButton = getByText('SEARCH');
+
+        expect(searchBox).toHaveValue('Initial Term');
+
+        fireEvent.change(searchBox, { target: { value: 'New Term' } });
+        expect(searchBox).toHaveValue('New Term');
+
+        fireEvent.click(submitButton);
+        expect(mockProps.onChange).toHaveBeenCalledWith('New Term');
+    });
+
+    it('renders AddMovie component', () => {
+        const { getByText } = render(<SearchForm {...mockProps} />);
+
+        expect(getByText('+ ADD MOVIE')).toBeInTheDocument();
+    });
+});
