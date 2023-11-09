@@ -1,19 +1,24 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import SortControl from './sortControl';
 
-const mockCurrentSelection = "Release Date";
-const mockHandleSelectChange = jest.fn();
+describe('Test SortControl component', () => {
+  test('it renders the SortControl component', () => {
+    render(<SortControl currentSelection="Release Date" handleSelectChange={() => { }} />);
+    const labelElement = screen.getByText('SORT BY');
+    const selectElement = screen.getByRole('combobox');
 
-test('calls handleSelectChange prop with the selected value when a different option is selected', () => {
-  const { getByText, getByTestId, debug } = render(<SortControl currentSelection={mockCurrentSelection} handleSelectChange={mockHandleSelectChange} />);
+    expect(labelElement).toBeInTheDocument();
+    expect(selectElement).toBeInTheDocument();
 
-  // Click on the select tag to open the dropdown
-  fireEvent.click(getByTestId('dropdown-select'));
-  debug();
-  // Click on a different option to select it
-  fireEvent.click(getByText('TITLE'));
+    expect(selectElement).toHaveValue('Release Date');
+  });
 
-  // Ensure that the callback is called with the proper value
-  expect(mockHandleSelectChange).toHaveBeenCalled();
-});
+  test('it calls the handleSelectChange function on select change', () => {
+    const handleSelectChange = jest.fn();
+    render(<SortControl currentSelection="Release Date" handleSelectChange={handleSelectChange} />);
+    const selectElement = screen.getByRole('combobox');
+    fireEvent.change(selectElement, { target: { value: 'Title' } });
+    expect(handleSelectChange).toHaveBeenCalledWith('Title');
+  });
+})
