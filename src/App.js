@@ -7,7 +7,6 @@ import MovieTile from './components/movieTile/movieTile';
 import MovieDetails from './components/movieDetails/movieDetails';
 import SortControl from './components/sortControl/sortControl';
 import { INITAL_SEARCH_TERM } from './constants';
-import Dialog from './components/dialog/dialog';
 import './App.scss';
 
 function App() {
@@ -15,18 +14,11 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMovie, setselectedMovie] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSortby, setSelectedSortby] = useState('Release Date');
   const getMoviesUrl = 'http://localhost:4000/movies';
   const genres = ['Action', 'Comedy', 'Drama', 'Science Fiction', 'Horror'];
   const selectedGenre = 'Drama';
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  }
-  const closeModal = () => {
-    setIsModalOpen(false);
-  }
   const handleSearch = (searchTerm) => {
     //Will remove after actual search implementation
     console.log("Searched with: " + searchTerm);
@@ -37,11 +29,22 @@ function App() {
   }
   const onMovieClick = (movie) => {
     setselectedMovie(movie);
-    openModal();
+    scrollToTop();
+  }
+  const onCloseMovieDetails = () => {
+    setselectedMovie(null);
   }
   const handleSelectChange = (value) => {
     setSelectedSortby(value);
   };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   useEffect(() => {
     axios.get(getMoviesUrl)
       .then((response) => {
@@ -60,7 +63,10 @@ function App() {
 
   return (
     <div className='app-container'>
-      <SearchForm initialSearchTerm={INITAL_SEARCH_TERM} onChange={handleSearch} />
+      {
+         selectedMovie? <MovieDetails movie={selectedMovie} onCloseMovieDetails={onCloseMovieDetails}></MovieDetails> 
+         : <SearchForm initialSearchTerm={INITAL_SEARCH_TERM} onChange={handleSearch} />
+      }
       <div className="movie-genre-sort-by-container">
         <div className='genreSelectContainer'>
         <GenreSelect genres={genres} selectedGenre={selectedGenre} onChange={handleGenreSelect} />
@@ -84,9 +90,8 @@ function App() {
         </div>) :
         (<div>Loading...</div>)
       }
-      <Dialog isOpen={isModalOpen} onClose={closeModal}>
-        {selectedMovie && <MovieDetails movie={selectedMovie}></MovieDetails>}
-      </Dialog>
+      {/* <Dialog isOpen={isModalOpen} onClose={closeModal}> */}
+      {/* </Dialog> */}
     </div>
   );
 }
