@@ -10,10 +10,10 @@ const MovieDetails = ({ movie, onCloseMovieDetails }) => {
                 <div className="movie-info">
                     <div className='title-rating-container'>
                         <p className="movie-title-details">{movie.title.toUpperCase()}</p>
-                        <div class="circle"><span class="number">{movie.vote_average}</span></div>
+                        <div className="circle"><span className="number">{movie.vote_average}</span></div>
                     </div>
                     <p><strong></strong>{movie.genres.map((genre) => {
-                        return <span className="genre"> {genre}{movie.genres.indexOf(genre) < movie.genres.length - 1 ? "," : "."} </span>
+                        return <span key={genre} className="genre"> {genre}{movie.genres.indexOf(genre) < movie.genres.length - 1 ? "," : "."} </span>
                     })}</p>
                     <p className="movie-tagline">{movie.tagline}</p>
                     <div className='movie-duration-details'>

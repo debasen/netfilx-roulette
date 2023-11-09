@@ -4,7 +4,7 @@ import './dropdown.scss';
 function Dropdown({ options, selectedOption, onChange }) {
   return (
     <div className="select-container">
-      <select className='select-sort-by' value={selectedOption} onChange={onChange}>
+      <select data-testid='dropdown-select' className='select-sort-by' value={selectedOption} onChange={onChange}>
         {options.map((option, index) => (
           <option className='option' key={index} value={option}>
             {option.toUpperCase()}

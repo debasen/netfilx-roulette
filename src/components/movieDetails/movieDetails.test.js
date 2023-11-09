@@ -2,61 +2,35 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import MovieDetails from './movieDetails';
 
-describe('Test MovieDetails Component', () => {
-  let movie;
-  let onCloseMock;
+const mockMovie = {
+  title: 'Test Movie',
+  poster_path: 'test-poster.jpg',
+  vote_average: 7.5,
+  genres: ['Action', 'Adventure'],
+  tagline: 'An exciting movie',
+  release_date: '2022-01-01',
+  runtime: 120,
+  overview: 'This is a test movie overview.',
+};
 
-  beforeEach(() => {
-    movie = {
-      title: 'Sample Movie',
-      poster_path: '/sample.jpg',
-      tagline: 'An Exciting Sample Movie',
-      release_date: '2023-01-01',
-      runtime: 120,
-      genres: ['Action', 'Adventure', 'Sci-Fi'],
-      overview: 'This is a sample movie overview. It tells you about the movie.',
-      budget: 50000000,
-      revenue: 150000000,
-      vote_average: 7.5,
-      vote_count: 1500,
-    };
-    onCloseMock = jest.fn();
-  });
+const mockOnCloseMovieDetails = jest.fn();
 
-  test('renders MovieDetails when isOpen is true', () => {
-    const { getByText, getByAltText } = render(
-      <MovieDetails isOpen={true} onClose={onCloseMock} movie={movie} />
-    );
+test('renders movie details with correct content', () => {
+  const { getByText, getByAltText } = render(<MovieDetails movie={mockMovie} onCloseMovieDetails={mockOnCloseMovieDetails} />);
 
-    expect(getByText(movie.title)).toBeInTheDocument();
-    expect(getByAltText('Movie Poster')).toBeInTheDocument();
-  });
+  expect(getByText('TEST MOVIE')).toBeInTheDocument();
+  expect(getByAltText('Movie Poster')).toBeInTheDocument();
+  expect(getByText('An exciting movie')).toBeInTheDocument();
+  expect(getByText(/Action/i)).toBeInTheDocument();
+  expect(getByText('This is a test movie overview.')).toBeInTheDocument();
+  expect(getByText('2022')).toBeInTheDocument();
+  expect(getByText('2hr 0min')).toBeInTheDocument();
+});
 
-  test('does not render MovieDetails when isOpen is false', () => {
-    const { queryByText, queryByAltText } = render(
-      <MovieDetails isOpen={false} onClose={onCloseMock} movie={movie} />
-    );
+test('calls onCloseMovieDetails when close button is clicked', () => {
+  const { getByText } = render(<MovieDetails movie={mockMovie} onCloseMovieDetails={mockOnCloseMovieDetails} />);
 
-    expect(queryByText(movie.title)).toBeNull();
-    expect(queryByAltText('Movie Poster')).toBeNull();
-  });
+  fireEvent.click(getByText('×'));
 
-  test('calls onClose when close button is clicked', () => {
-    const { getByText } = render(
-      <MovieDetails isOpen={true} onClose={onCloseMock} movie={movie} />
-    );
-    const closeButton = getByText('×');
-    fireEvent.click(closeButton);
-    expect(onCloseMock).toHaveBeenCalled();
-  });
-
-  test('displays movie details correctly', () => {
-    const { getByText, getByAltText } = render(
-      <MovieDetails isOpen={true} onClose={onCloseMock} movie={movie} />
-    );
-
-    expect(getByText(movie.title)).toBeInTheDocument();
-    expect(getByAltText('Movie Poster')).toHaveAttribute('src', movie.poster_path);
-  });
-
+  expect(mockOnCloseMovieDetails).toHaveBeenCalled();
 });
