@@ -55,6 +55,7 @@
     "cypress": "^13.3.3",
     "eslint-plugin-storybook": "^0.6.15",
     "prop-types": "^15.8.1",
+    "sass": "^1.69.5",
     "storybook": "^7.5.2",
     "webpack": "^5.89.0"
   }

@@ -5,7 +5,7 @@ import SortControl from './sortControl';
 describe('Test SortControl component', () => {
   test('it renders the SortControl component', () => {
     render(<SortControl currentSelection="Release Date" handleSelectChange={() => { }} />);
-    const labelElement = screen.getByText('Sort by:');
+    const labelElement = screen.getByText('SORT BY');
     const selectElement = screen.getByRole('combobox');
 
     expect(labelElement).toBeInTheDocument();

@@ -1,0 +1,65 @@
+@import '../../styles/variables';
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 16px;
+    }
+
+    .form-field.overview {
+        margin-top: 16px;
+    }
+
+    .form-action {
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 12px;
+
+        .form-reset-button {
+            background-color: transparent;
+            color: $icon-color;
+            border: 2px solid $icon-color;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            grid-column: span 2;
+            margin-right: 8px;
+        }
+
+        .form-button {
+            background-color: $icon-color;
+            color: $primary-color;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    }
+
+    .form-label {
+        color: $icon-color;
+        display: inline-block;
+        margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+        background-color: $dark-label-color;
+        color: $primary-color;
+        border: none;
+        padding: 14px;
+        border-radius: 4px;
+        width: 100%;
+    }
+
+    .form-placeholder::placeholder {
+        color: #888;
+    }
+}

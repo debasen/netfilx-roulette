@@ -1,34 +1,43 @@
-import './movieDetails.css';
+import './movieDetails.scss';
 
-const MovieDetails = ({ isOpen, onClose, movie }) => {
-    if (!isOpen) return null;
+const MovieDetails = ({ movie, onCloseMovieDetails }) => {
     return (
-        <div className="modal">
-            <div className="modal-content">
-                <span className="close" onClick={onClose}>&times;</span>
-                <div className="movie-card">
-                    <div className="movie-poster">
-                        <img src={movie.poster_path} alt="Movie Poster" />
+        <div className="movie-details-container">
+            <div className="movie-card">
+                <div className="movie-poster-details">
+                    <img src={movie.poster_path} alt="Movie Poster" />
+                </div>
+                <div className="movie-info">
+                    <div className='title-rating-container'>
+                        <p className="movie-title-details">{movie.title.toUpperCase()}</p>
+                        <div className="circle"><span className="number">{movie.vote_average}</span></div>
                     </div>
-                    <div className="movie-info">
-                        <h2 className="movie-title">{movie.title}</h2>
-                        <p className="movie-tagline">{movie.tagline}</p>
-                        <div className="movie-details">
-                            <p><strong>Release Date:</strong> {movie.release_date}</p>
-                            <p><strong>Runtime:</strong>{movie.runtime}</p>
-                            <p><strong>Genres:</strong>{movie.genres.map((genre) => {
-                                return <span className="genre"> {genre}{movie.genres.indexOf(genre) < movie.genres.length - 1 ? "," : "."} </span>
-                            })}</p>
-                            <p><strong>Overview:</strong>{movie.overview}</p>
-                            <p><strong>Budget:</strong>${movie.budget}</p>
-                            <p><strong>Revenue:</strong>${movie.revenue}</p>
-                            <p><strong>Vote Average:</strong> {movie.vote_average}</p>
-                            <p><strong>Vote Count:</strong> {movie.vote_count}</p>
-                        </div>
+                    {renderGenres(movie.genres)}
+                    {/* <p className="movie-tagline">{movie.tagline}</p> */}
+                    <div className='movie-duration-details'>
+                        <p className="movie-release-year">{movie.release_date.split("-")[0]}</p>
+                        <p className="movie-duration">{Math.floor(movie.runtime / 60)}hr {(movie.runtime % 60)}min </p>
+                    </div>
+                    <div className="movie-details">
+                        <p>{movie.overview}</p>
                     </div>
                 </div>
             </div>
+            <span className="close close-movie-details" onClick={onCloseMovieDetails}>&times;</span>
         </div>
+
     )
 }
+
+const renderGenres = (genres) => (
+    <p>
+        <strong></strong>
+        {genres.map((genre, index) => (
+            <span key={genre} className="genre">
+                {genre}
+                {index < genres.length - 1 ? "," : "."}
+            </span>
+        ))}
+    </p>
+);
 export default MovieDetails;

@@ -3,30 +3,22 @@ import axios from 'axios'
 
 import SearchForm from './components/searchForm/searchForm';
 import GenreSelect from './components/genreSelect/genreSelect';
-import Counter from './components/counter/counter';
 import MovieTile from './components/movieTile/movieTile';
 import MovieDetails from './components/movieDetails/movieDetails';
 import SortControl from './components/sortControl/sortControl';
-import { INITAL_COUNT, INITAL_SEARCH_TERM } from './constants';
-import './App.css';
+import { INITAL_SEARCH_TERM } from './constants';
+import './App.scss';
 
 function App() {
   const [movieData, setMovieData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMovie, setselectedMovie] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSortby, setSelectedSortby] = useState('Release Date');
   const getMoviesUrl = 'http://localhost:4000/movies';
   const genres = ['Action', 'Comedy', 'Drama', 'Science Fiction', 'Horror'];
   const selectedGenre = 'Drama';
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  }
-  const closeModal = () => {
-    setIsModalOpen(false);
-  }
   const handleSearch = (searchTerm) => {
     //Will remove after actual search implementation
     console.log("Searched with: " + searchTerm);
@@ -37,11 +29,22 @@ function App() {
   }
   const onMovieClick = (movie) => {
     setselectedMovie(movie);
-    openModal();
+    scrollToTop();
+  }
+  const onCloseMovieDetails = () => {
+    setselectedMovie(null);
   }
   const handleSelectChange = (value) => {
     setSelectedSortby(value);
   };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   useEffect(() => {
     axios.get(getMoviesUrl)
       .then((response) => {
@@ -59,21 +62,36 @@ function App() {
   }
 
   return (
-    <div>
-      <SearchForm initialSearchTerm={INITAL_SEARCH_TERM} onChange={handleSearch} />
-      <GenreSelect genres={genres} selectedGenre={selectedGenre} onChange={handleGenreSelect} />
-      <Counter initialCount={INITAL_COUNT} />
-      <SortControl currentSelection={selectedSortby} handleSelectChange={handleSelectChange} />
+    <div className='app-container'>
+      {
+         selectedMovie? <MovieDetails movie={selectedMovie} onCloseMovieDetails={onCloseMovieDetails}></MovieDetails> 
+         : <SearchForm initialSearchTerm={INITAL_SEARCH_TERM} onChange={handleSearch} />
+      }
+      <div className="movie-genre-sort-by-container">
+        <div className='genreSelectContainer'>
+        <GenreSelect genres={genres} selectedGenre={selectedGenre} onChange={handleGenreSelect} />
+        </div>
+        <div></div>
+        <div className='sortByContainer'>
+        <SortControl currentSelection={selectedSortby} handleSelectChange={handleSelectChange} />
+        </div>
+       </div>
+      
+      {/* <Counter initialCount={INITAL_COUNT} /> */}
+      <span className="bold-br"></span>
       {!loading ?
         (<div>
+          <p className='movie-count'><b>{movieData.data.length}</b> movies found</p>
+        <div className='movie-tile-container'>
           {movieData.data.map((movie) => {
-            // console.log(movie);
             return <MovieTile key={movie.id} movie={movie} onClick={onMovieClick} />;
           })}
+        </div>
         </div>) :
         (<div>Loading...</div>)
       }
-      <MovieDetails isOpen={isModalOpen} onClose={closeModal} movie={selectedMovie} />
+      {/* <Dialog isOpen={isModalOpen} onClose={closeModal}> */}
+      {/* </Dialog> */}
     </div>
   );
 }

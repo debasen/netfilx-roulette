@@ -1,16 +1,16 @@
 import React from 'react';
+import './genreList.scss';
 
 function GenreList({ genres, selectedGenre, onChange }) {
   return (
     <div>
-      <h2>Movie Genres:</h2>
       {genres.map((genre) => (
         <button
           key={genre}
-          className={genre === selectedGenre ? 'selected' : ''}
+          className={genre === selectedGenre ? 'selected-genre' : 'transparent-button'}
           onClick={() => onChange(genre)}
         >
-          {genre}
+          {genre.toUpperCase()}
         </button>
       ))}
     </div>

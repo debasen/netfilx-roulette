@@ -1,0 +1,13 @@
+@import '../../styles/variables';
+
+.add-movie-button {
+    background-color: $dark-label-color;
+    color: $icon-color;
+    border: 0px;
+    padding: 12px 18px;
+    font-size: 1rem;
+    border-radius: 4px;
+    float: right;
+    margin-right: 2%;
+    cursor: pointer;
+}
