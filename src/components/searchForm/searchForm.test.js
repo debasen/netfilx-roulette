@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
 import SearchForm from './searchForm';
 
 describe('SearchForm Component', () => {
@@ -9,10 +9,10 @@ describe('SearchForm Component', () => {
     };
 
     it('renders with initial search term and calls onChange prop on submit', () => {
-        const { getByLabelText, getByText } = render(<SearchForm {...mockProps} />);
+        render(<SearchForm {...mockProps} />);
 
-        const searchBox = getByLabelText('search-box');
-        const submitButton = getByText('SEARCH');
+        const searchBox = screen.getByLabelText('search-box');
+        const submitButton = screen.getByText('SEARCH');
 
         expect(searchBox).toHaveValue('Initial Term');
 
@@ -24,8 +24,8 @@ describe('SearchForm Component', () => {
     });
 
     it('renders AddMovie component', () => {
-        const { getByText } = render(<SearchForm {...mockProps} />);
+        render(<SearchForm {...mockProps} />);
 
-        expect(getByText('+ ADD MOVIE')).toBeInTheDocument();
+        expect(screen.getByText('+ ADD MOVIE')).toBeInTheDocument();
     });
 });

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import './searchForm.scss';
 import { AddMovie } from "../addMovie/addMovie";
+import './searchForm.scss';
 
 const SearchForm = (props) => {
     let [searchedInput, setSearchedInput] = useState(props.initialSearchTerm);

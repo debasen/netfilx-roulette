@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "./addMovie.scss";
 import Dialog from "../dialog/dialog";
 import { MovieForm } from "../movieForm/movieForm";
+import "./addMovie.scss";
 
 export const AddMovie = () => {
   const [isOpen, setOpen] = useState(false);

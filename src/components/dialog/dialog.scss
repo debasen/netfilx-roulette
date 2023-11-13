@@ -13,35 +13,24 @@
   justify-content: center;
   align-items: center;
   z-index: 999;
-}
 
-.modal-content {
-  background-color: $background-color;
-  border-radius: 5px;
-}
+  .modal-content {
+    background-color: $background-color;
+    border-radius: 5px;
 
-.modal-header {
-  display: flex;
-  justify-content: flex-end;
-}
+    .modal-header {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
 
-.modal-title {
-  color: $icon-color;
-  font-size: 24px;
-  margin-bottom: 12px;
-}
+  .modal-body {
+    padding: 0px 24px 24px 24px;
 
-
-.modal-body {
-  padding: 0px 24px 24px 24px;
-}
-
-.close {
-  cursor: pointer;
-  font-size: 3.2rem;
-  color: $primary-color;
-  font-weight: 100;
-  margin-right: 8px;
-  padding: 0px;
-  line-height: 3rem;
+    .modal-title {
+      color: $icon-color;
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+  }
 }

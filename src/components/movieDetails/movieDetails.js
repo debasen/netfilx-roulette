@@ -12,10 +12,8 @@ const MovieDetails = ({ movie, onCloseMovieDetails }) => {
                         <p className="movie-title-details">{movie.title.toUpperCase()}</p>
                         <div className="circle"><span className="number">{movie.vote_average}</span></div>
                     </div>
-                    <p><strong></strong>{movie.genres.map((genre) => {
-                        return <span key={genre} className="genre"> {genre}{movie.genres.indexOf(genre) < movie.genres.length - 1 ? "," : "."} </span>
-                    })}</p>
-                    <p className="movie-tagline">{movie.tagline}</p>
+                    {renderGenres(movie.genres)}
+                    {/* <p className="movie-tagline">{movie.tagline}</p> */}
                     <div className='movie-duration-details'>
                         <p className="movie-release-year">{movie.release_date.split("-")[0]}</p>
                         <p className="movie-duration">{Math.floor(movie.runtime / 60)}hr {(movie.runtime % 60)}min </p>
@@ -30,4 +28,16 @@ const MovieDetails = ({ movie, onCloseMovieDetails }) => {
 
     )
 }
+
+const renderGenres = (genres) => (
+    <p>
+        <strong></strong>
+        {genres.map((genre, index) => (
+            <span key={genre} className="genre">
+                {genre}
+                {index < genres.length - 1 ? "," : "."}
+            </span>
+        ))}
+    </p>
+);
 export default MovieDetails;

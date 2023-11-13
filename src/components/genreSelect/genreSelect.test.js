@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
 import GenreSelect from './genreSelect';
 
 const mockGenres = ['ACTION', 'DRAMA', 'COMEDY'];
@@ -8,29 +8,29 @@ const mockOnChange = jest.fn();
 
 describe('GenreSelect Component', () => {
     it('renders GenreList with provided genres and selected genre', () => {
-        const { getByText } = render(<GenreSelect genres={mockGenres} selectedGenre={mockSelectedGenre} onChange={mockOnChange} />);
+        render(<GenreSelect genres={mockGenres} selectedGenre={mockSelectedGenre} onChange={mockOnChange} />);
 
         mockGenres.forEach((genre) => {
-            expect(getByText(genre)).toBeInTheDocument();
+            expect(screen.getByText(genre)).toBeInTheDocument();
         });
 
-        expect(getByText(mockSelectedGenre)).toHaveClass('selected-genre');
+        expect(screen.getByText(mockSelectedGenre)).toHaveClass('selected-genre');
     });
 
     it('calls onChange prop when a genre is selected', () => {
-        const { getByText } = render(<GenreSelect genres={mockGenres} selectedGenre={mockSelectedGenre} onChange={mockOnChange} />);
+        render(<GenreSelect genres={mockGenres} selectedGenre={mockSelectedGenre} onChange={mockOnChange} />);
 
-        fireEvent.click(getByText('COMEDY'));
+        fireEvent.click(screen.getByText('COMEDY'));
 
         expect(mockOnChange).toHaveBeenCalledWith('COMEDY');
     });
 
     it('updates selected genre state when a genre is selected', () => {
-        const { getByText } = render(<GenreSelect genres={mockGenres} selectedGenre={mockSelectedGenre} onChange={mockOnChange} />);
+        render(<GenreSelect genres={mockGenres} selectedGenre={mockSelectedGenre} onChange={mockOnChange} />);
 
-        fireEvent.click(getByText('ACTION'));
+        fireEvent.click(screen.getByText('ACTION'));
 
-        expect(getByText('ACTION')).toHaveClass('selected-genre');
+        expect(screen.getByText('ACTION')).toHaveClass('selected-genre');
         expect(mockOnChange).toHaveBeenCalledWith('ACTION');
     });
 });
