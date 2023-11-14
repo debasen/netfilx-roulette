@@ -5,9 +5,9 @@ function Dropdown({ options, selectedOption, onChange }) {
   return (
     <div className="select-container">
       <select data-testid='dropdown-select' className='select-sort-by' value={selectedOption} onChange={onChange}>
-        {options.map((option, index) => (
-          <option className='option' key={index} value={option}>
-            {option.toUpperCase()}
+        {Object.keys(options).map((key) => (
+          <option className='option' key={key} value={key}>
+            {options[key].toUpperCase()}
           </option>
         ))}
       </select>
