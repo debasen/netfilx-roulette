@@ -10,21 +10,28 @@ import { INITAL_SEARCH_TERM } from '../../constants';
 import './movieListPage.scss';
 
 function MovieListPage() {
-    const [movieData, setMovieData] = useState([]);
+    const [movieList, setMovieList] = useState([]);
+    const [movieCount, setMovieCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedMovie, setselectedMovie] = useState(null);
     const [selectedSortby, setSelectedSortby] = useState('release_date');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedGenre, setSelectedGenre] = useState('All');
     const getMoviesUrl = 'http://localhost:4000/movies';
-    const genres = ['Action', 'Comedy', 'Drama', 'Science Fiction', 'Horror'];
-    const selectedGenre = 'Drama';
+    const genres = ['All', 'Action', 'Comedy', 'Drama', 'Science Fiction', 'Horror'];
+    // Create a cancel token source
+    // const cancelTokenSource = axios.CancelToken.source();
 
     const handleSearch = (searchTerm) => {
-        getMovies('search', searchTerm);
+        setSearchQuery(searchTerm);
     }
     const handleGenreSelect = (selectedGenre) => {
-        getMovies('genre', selectedGenre);
+        setSelectedGenre(selectedGenre);
     }
+    const handleSortChange = (value) => {
+        setSelectedSortby(value);
+    };
     const onMovieClick = (movie) => {
         setselectedMovie(movie);
         scrollToTop();
@@ -32,11 +39,6 @@ function MovieListPage() {
     const onCloseMovieDetails = () => {
         setselectedMovie(null);
     }
-    const handleSortChange = (value) => {
-        setSelectedSortby(value);
-        getMovies();
-    };
-
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -44,27 +46,36 @@ function MovieListPage() {
         });
     };
 
-    const getMovies = useCallback((searchType, searchTerm) => {
-        let url = `${getMoviesUrl}?sortBy=${selectedSortby}&sortOrder=asc`;
-        if (searchType) {
-            url += searchType === 'genre' ? '&searchBy=genres' : '&searchBy=title';
-            url += `&search=${searchTerm}`;
-        }
-
-        axios.get(url)
+    const getMovies = useCallback(() => {
+        const cancelTokenSource = axios.CancelToken.source();
+        const genre = selectedGenre === 'All' ? '' : selectedGenre;
+        axios.get(getMoviesUrl, {
+            params: {
+                sortBy: selectedSortby,
+                sortOrder: 'asc',
+                searchBy: 'title',
+                search: searchQuery,
+                filter: genre
+            },
+            cancelToken: cancelTokenSource.token
+        })
             .then((response) => {
-                setMovieData(response.data);
+                setMovieList(response.data.data);
+                setMovieCount(response.data.totalAmount);
                 setLoading(false);
             })
             .catch((err) => {
                 setError(err);
                 setLoading(false);
             });
-    }, [selectedSortby]);
+            return () => {
+                cancelTokenSource.cancel('Request canceled');
+            }
+    }, [selectedSortby, selectedGenre, searchQuery]);
 
     useEffect(() => {
         getMovies();
-    }, [getMovies]);
+    }, [getMovies, selectedSortby, searchQuery, selectedGenre]);
 
     if (error) {
         return <div>Error: {error?.message}</div>
@@ -90,9 +101,9 @@ function MovieListPage() {
             <span className="bold-br"></span>
             {!loading ?
                 (<div>
-                    <p className='movie-count'><b>{movieData.data.length}</b> movies found</p>
+                    <p className='movie-count'><b>{movieCount}</b> movies found</p>
                     <div className='movie-tile-container'>
-                        {movieData.data.map((movie) => {
+                        {movieList.map((movie) => {
                             return <MovieTile key={movie.id} movie={movie} onClick={onMovieClick} />;
                         })}
                     </div>

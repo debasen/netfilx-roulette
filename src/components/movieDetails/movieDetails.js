@@ -1,11 +1,14 @@
 import './movieDetails.scss';
 
 const MovieDetails = ({ movie, onCloseMovieDetails }) => {
+    const addImageFallback = (event) => {
+        event.currentTarget.src = process.env.PUBLIC_URL + '/assets/img/placeholder.png';
+    }
     return (
         <div className="movie-details-container">
             <div className="movie-card">
                 <div className="movie-poster-details">
-                    <img src={movie.poster_path} alt="Movie Poster" />
+                    <img src={movie.poster_path} alt="Movie Poster" onError={addImageFallback} />
                 </div>
                 <div className="movie-info">
                     <div className='title-rating-container'>
