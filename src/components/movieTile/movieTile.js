@@ -34,10 +34,14 @@ const MovieTile = ({ movie, onClick }) => {
         console.log("To be implemented");
     }
 
+    const addImageFallback = (event) => {
+        event.currentTarget.src = process.env.PUBLIC_URL + '/assets/img/placeholder.png';
+    }
+
     return (<>
         <div className="movie-tile" onClick={onMovieSelect}>
             <div className="movie-poster">
-                <img src={imageUrl} alt={movieName} />
+                <img src={imageUrl} alt={movieName} onError={addImageFallback} />
             </div>
             <div className="movie-tile-details">
                 <div className="movie-details-left">
