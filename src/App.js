@@ -6,8 +6,8 @@ import MovieDetailsWrapper from './components/movieDetailsWrapper/movieDetailsWr
 import './App.scss';
 
 function App() {
-  const [queryString, setqueryString] = useState("");
   const [searchParams, setSearchParams] = useSearchParams({ query: '' });
+  const [queryString, setqueryString] = useState(searchParams.get('query'));
 
   const handleSearch = (searchTerm) => {
     if (searchTerm) {
