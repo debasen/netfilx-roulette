@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios'
-import { useSearchParams, Outlet, Link, useNavigate } from 'react-router-dom';
+import { useSearchParams, Outlet, Link } from 'react-router-dom';
 import GenreSelect from '../../components/genreSelect/genreSelect';
 import MovieTile from '../../components/movieTile/movieTile';
 import SortControl from '../../components/sortControl/sortControl';
@@ -13,34 +13,20 @@ function MovieListPage({ query }) {
     const [error, setError] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams({
         sortBy: 'release_date',
-        query: '',
-        genre: ''
+        genre: 'All'
     });
-    const navigate = useNavigate();
-    const sortByQuery = searchParams.get('sortBy') || 'release_date';
-    const selectedGenre = searchParams.get('genre') || 'All';
-    // const [selectedGenre, setSelectedGenre] = useState('All');
     const getMoviesUrl = 'http://localhost:4000/movies';
     const genres = ['All', 'Action', 'Comedy', 'Drama', 'Science Fiction', 'Horror'];
-    // Create a cancel token source
-    // const cancelTokenSource = axios.CancelToken.source();
-    useEffect(() => {
-        if (query) {
-            setSearchParams({ query: query, sortBy: sortByQuery, genre: selectedGenre });
-        } else {
-            if (sortByQuery !== 'release_date' || selectedGenre !== 'All') {
-                navigate(`/?query=&sortBy=${sortByQuery}&genre=${selectedGenre}`)
-            } else {
-                navigate(`/`)
-            }
-        }
-    }, [query])
+
     const handleGenreSelect = (selectedGenre) => {
-        setSearchParams({ query: query, sortBy: sortByQuery, genre: selectedGenre });
+        searchParams.set('genre', selectedGenre);
+        setSearchParams(searchParams);
     }
     const handleSortChange = (value) => {
-        setSearchParams({ query: query, sortBy: value, genre: selectedGenre });
+        searchParams.set('sortBy', value);
+        setSearchParams(searchParams);
     };
+
     const onMovieClick = (movie) => {
         scrollToTop();
     }
@@ -54,13 +40,14 @@ function MovieListPage({ query }) {
 
     const getMovies = useCallback(() => {
         const cancelTokenSource = axios.CancelToken.source();
-        const genre = selectedGenre === 'All' ? '' : selectedGenre;
+        let genre = searchParams.get('genre');
+        genre = genre === 'All' ? '' : genre;
         axios.get(getMoviesUrl, {
             params: {
                 sortBy: searchParams.get('sortBy'),
                 sortOrder: 'asc',
                 searchBy: 'title',
-                search: searchParams.get('query'),
+                search: query,
                 filter: genre
             },
             cancelToken: cancelTokenSource.token
@@ -77,11 +64,12 @@ function MovieListPage({ query }) {
         return () => {
             cancelTokenSource.cancel('Request canceled');
         }
-    }, [searchParams]);
+    }, [searchParams, query]);
 
     useEffect(() => {
         getMovies();
-    }, [getMovies, searchParams]);
+    }, [getMovies, searchParams, query]);
+
 
     if (error) {
         return <div>Error: {error?.message}</div>
@@ -92,11 +80,11 @@ function MovieListPage({ query }) {
             <Outlet />
             <div className="movie-genre-sort-by-container">
                 <div className='genreSelectContainer'>
-                    <GenreSelect genres={genres} selectedGenre={selectedGenre} onChange={handleGenreSelect} />
+                    <GenreSelect genres={genres} selectedGenre={searchParams.get('genre')} onChange={handleGenreSelect} />
                 </div>
                 <div></div>
                 <div className='sortByContainer'>
-                    <SortControl currentSelection={sortByQuery} handleSelectChange={handleSortChange} />
+                    <SortControl currentSelection={searchParams.get('sortBy')} handleSelectChange={handleSortChange} />
                 </div>
             </div>
 
@@ -113,8 +101,6 @@ function MovieListPage({ query }) {
                 </div>) :
                 (<div>Loading...</div>)
             }
-            {/* <Dialog isOpen={isModalOpen} onClose={closeModal}> */}
-            {/* </Dialog> */}
         </div>
     );
 }
