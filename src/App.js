@@ -3,6 +3,7 @@ import MovieListPage from './components/movieListPage/movieListPage';
 import SearchForm from './components/searchForm/searchForm';
 import { Route, Routes, useSearchParams } from 'react-router-dom';
 import MovieDetailsWrapper from './components/movieDetailsWrapper/movieDetailsWrapper';
+import { AddMovieForm } from './components/addMovieForm/addMovieForm';
 import './App.scss';
 
 function App() {
@@ -22,7 +23,9 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<MovieListPage query={queryString} />} >
-        <Route index element={<SearchForm initialSearchTerm={searchParams.get('query')} onChange={handleSearch} />} />
+        <Route path="/" element={<SearchForm initialSearchTerm={searchParams.get('query')} onChange={handleSearch} />}>
+          <Route path='/new' element={<AddMovieForm />} />
+        </Route>
         <Route path=":movieId" element={<MovieDetailsWrapper />} />
       </Route>
     </Routes>
