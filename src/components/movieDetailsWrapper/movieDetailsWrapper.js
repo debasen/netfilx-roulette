@@ -23,7 +23,7 @@ const MovieDetailsWrapper = () => {
         });
   }, [movieId]);
   const onCloseMovieDetails = () => {
-    navigate('/');
+    navigate(-1);
     }
     if (error) {
         return <div>Error: {error?.message}</div>
