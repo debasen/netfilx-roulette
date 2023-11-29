@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios'
-import { useSearchParams, Outlet, Link } from 'react-router-dom';
+import { useSearchParams, Outlet, useNavigate } from 'react-router-dom';
 import GenreSelect from '../../components/genreSelect/genreSelect';
 import MovieTile from '../../components/movieTile/movieTile';
 import SortControl from '../../components/sortControl/sortControl';
 import './movieListPage.scss';
 
 function MovieListPage({ query }) {
+    const navigate = useNavigate();
     const [movieList, setMovieList] = useState([]);
     const [movieCount, setMovieCount] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -31,7 +32,8 @@ function MovieListPage({ query }) {
         scrollToTop();
     }
 
-    const scrollToTop = () => {
+    const scrollToTop = (movieId) => {
+        navigate('/' + movieId);
         window.scrollTo({
             top: 0,
             behavior: 'smooth',
@@ -95,7 +97,7 @@ function MovieListPage({ query }) {
                     <p className='movie-count'><b>{movieCount}</b> movies found</p>
                     <div className='movie-tile-container'>
                         {movieList.map((movie) => {
-                            return <Link to={`/${movie.id}`}><MovieTile key={movie.id} movie={movie} onClick={onMovieClick} /></Link>;
+                            return <MovieTile key={movie.id} movie={movie} onClick={() => onMovieClick(movie.id)} />;
                         })}
                     </div>
                 </div>) :

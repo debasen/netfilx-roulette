@@ -1,15 +1,17 @@
-import './movieForm.scss'
-
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import Select from 'react-select';
+import './movieForm.scss';
 
 export const MovieForm = ({ movie, onSubmit }) => {
+
   // Default values when no movie object is provided
   const defaultValues = {
     title: '',
     release_date: '',
     poster_path: '',
     vote_average: '',
-    genres: ['action'],
+    genres: ['Action'],
     runtime: '',
     overview: '',
   };
@@ -17,7 +19,7 @@ export const MovieForm = ({ movie, onSubmit }) => {
   // Use the provided movie object or default values
   const {
     title,
-    release_date,
+    release_date: releaseDate,
     poster_path: movieUrl,
     vote_average: rating,
     genres,
@@ -25,34 +27,31 @@ export const MovieForm = ({ movie, onSubmit }) => {
     overview,
   } = movie || defaultValues;
 
-  // State to hold form data
-  const [formData, setFormData] = useState({
-    title,
-    release_date,
-    movieUrl,
-    rating,
-    genre: genres[0],
-    runtime,
-    overview,
+  const { register, handleSubmit, setValue, watch } = useForm({
+    defaultValues: {
+      title,
+      releaseDate,
+      movieUrl,
+      rating,
+      genres: genres.map((genre) => ({ value: genre, label: genre })),
+      runtime,
+      overview,
+    },
   });
 
-  // Handle input changes and update form data
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const handleFormSubmit = (data) => {
+    // Map selected genres back to an array of strings
+    const selectedGenres = data.genres ? data.genres.map((option) => option.value) : [];
+    onSubmit({ ...data, genre: selectedGenres });
   };
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    onSubmit({ ...movie, ...formData });
-  }
+  // Use watch to get the selected genre value
+  const selectedGenre = watch('genres');
+
 
   return (
     <div className="form-container">
-      <form onSubmit={handleFormSubmit}>
+      <form onSubmit={handleSubmit(handleFormSubmit)}>
         <div className="form-grid">
           <div className="form-field">
             <label className="form-label" htmlFor="title">
@@ -62,10 +61,8 @@ export const MovieForm = ({ movie, onSubmit }) => {
               className="form-input form-placeholder"
               type="text"
               id="title"
-              name="title"
+              {...register('title')}
               placeholder="Enter the movie title"
-              value={formData.title}
-              onChange={handleInputChange}
             />
           </div>
           <div className="form-field">
@@ -76,9 +73,7 @@ export const MovieForm = ({ movie, onSubmit }) => {
               className="form-input"
               type="date"
               id="releaseDate"
-              name="release_date"
-              value={formData.release_date}
-              onChange={handleInputChange}
+              {...register('releaseDate')}
             />
           </div>
           <div className="form-field">
@@ -89,10 +84,8 @@ export const MovieForm = ({ movie, onSubmit }) => {
               className="form-input form-placeholder"
               type="text"
               id="movieUrl"
-              name="movieUrl"
+              {...register('movieUrl')}
               placeholder="Enter the movie URL"
-              value={formData.movieUrl}
-              onChange={handleInputChange}
             />
           </div>
           <div className="form-field">
@@ -103,28 +96,28 @@ export const MovieForm = ({ movie, onSubmit }) => {
               className="form-input form-placeholder"
               type="text"
               id="rating"
-              name="rating"
+              {...register('rating')}
               placeholder="Enter the movie rating"
-              value={formData.rating}
-              onChange={handleInputChange}
             />
           </div>
           <div className="form-field">
             <label className="form-label" htmlFor="genre">
               GENRE
             </label>
-            <select
-              className="form-select"
-              id="genre"
-              name="genre"
-              value={formData.genre}
-              onChange={handleInputChange}
-            >
-              <option value="action">Action</option>
-              <option value="comedy">Comedy</option>
-              <option value="drama">Drama</option>
-              <option value="sci-fi">Sci-Fi</option>
-            </select>
+            <Select
+              classNamePrefix='form-select'
+              {...register('genres', { required: true })} // Use register properly
+              options={[
+                { value: 'Action', label: 'Action' },
+                { value: 'Comedy', label: 'Comedy' },
+                { value: 'Drama', label: 'Drama' },
+                { value: 'Horror', label: 'Horror' },
+                { value: 'Science Fiction', label: 'Science Fiction' },
+              ]}
+              isMulti
+              value={selectedGenre} // Set the value prop to avoid the mentioned error
+              onChange={(selectedOptions) => setValue('genres', selectedOptions)} // Update the genre value on change
+            />
           </div>
           <div className="form-field">
             <label className="form-label" htmlFor="runtime">
@@ -134,10 +127,8 @@ export const MovieForm = ({ movie, onSubmit }) => {
               className="form-input form-placeholder"
               type="text"
               id="runtime"
-              name="runtime"
+              {...register('runtime')}
               placeholder="Enter the movie runtime"
-              value={formData.runtime}
-              onChange={handleInputChange}
             />
           </div>
         </div>
@@ -149,10 +140,8 @@ export const MovieForm = ({ movie, onSubmit }) => {
             className="form-textarea form-placeholder"
             rows="4"
             id="overview"
-            name="overview"
+            {...register('overview')}
             placeholder="Enter the movie overview"
-            value={formData.overview}
-            onChange={handleInputChange}
           ></textarea>
         </div>
         <div className="form-action">

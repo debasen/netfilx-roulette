@@ -62,4 +62,16 @@
     .form-placeholder::placeholder {
         color: #888;
     }
+
+    .form-select__multi-value{
+        background-color: $icon-color;
+    }
+    .form-select__control{
+        background-color: $dark-label-color;
+        border: none;
+        padding: 4px 0px;
+    }
+    .form-select__menu{
+        background-color: $dark-label-color;
+    }
 }
