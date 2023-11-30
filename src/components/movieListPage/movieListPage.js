@@ -1,44 +1,36 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios'
-
-import SearchForm from '../../components/searchForm/searchForm';
+import { useSearchParams, Outlet, Link } from 'react-router-dom';
 import GenreSelect from '../../components/genreSelect/genreSelect';
 import MovieTile from '../../components/movieTile/movieTile';
-import MovieDetails from '../../components/movieDetails/movieDetails';
 import SortControl from '../../components/sortControl/sortControl';
-import { INITAL_SEARCH_TERM } from '../../constants';
 import './movieListPage.scss';
 
-function MovieListPage() {
+function MovieListPage({ query }) {
     const [movieList, setMovieList] = useState([]);
     const [movieCount, setMovieCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedMovie, setselectedMovie] = useState(null);
-    const [selectedSortby, setSelectedSortby] = useState('release_date');
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedGenre, setSelectedGenre] = useState('All');
+    const [searchParams, setSearchParams] = useSearchParams({
+        sortBy: 'release_date',
+        genre: 'All'
+    });
     const getMoviesUrl = 'http://localhost:4000/movies';
     const genres = ['All', 'Action', 'Comedy', 'Drama', 'Science Fiction', 'Horror'];
-    // Create a cancel token source
-    // const cancelTokenSource = axios.CancelToken.source();
 
-    const handleSearch = (searchTerm) => {
-        setSearchQuery(searchTerm);
-    }
     const handleGenreSelect = (selectedGenre) => {
-        setSelectedGenre(selectedGenre);
+        searchParams.set('genre', selectedGenre);
+        setSearchParams(searchParams);
     }
     const handleSortChange = (value) => {
-        setSelectedSortby(value);
+        searchParams.set('sortBy', value);
+        setSearchParams(searchParams);
     };
+
     const onMovieClick = (movie) => {
-        setselectedMovie(movie);
         scrollToTop();
     }
-    const onCloseMovieDetails = () => {
-        setselectedMovie(null);
-    }
+
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -48,13 +40,14 @@ function MovieListPage() {
 
     const getMovies = useCallback(() => {
         const cancelTokenSource = axios.CancelToken.source();
-        const genre = selectedGenre === 'All' ? '' : selectedGenre;
+        let genre = searchParams.get('genre');
+        genre = genre === 'All' ? '' : genre;
         axios.get(getMoviesUrl, {
             params: {
-                sortBy: selectedSortby,
+                sortBy: searchParams.get('sortBy'),
                 sortOrder: 'asc',
                 searchBy: 'title',
-                search: searchQuery,
+                search: query,
                 filter: genre
             },
             cancelToken: cancelTokenSource.token
@@ -68,14 +61,15 @@ function MovieListPage() {
                 setError(err);
                 setLoading(false);
             });
-            return () => {
-                cancelTokenSource.cancel('Request canceled');
-            }
-    }, [selectedSortby, selectedGenre, searchQuery]);
+        return () => {
+            cancelTokenSource.cancel('Request canceled');
+        }
+    }, [searchParams, query]);
 
     useEffect(() => {
         getMovies();
-    }, [getMovies, selectedSortby, searchQuery, selectedGenre]);
+    }, [getMovies, searchParams, query]);
+
 
     if (error) {
         return <div>Error: {error?.message}</div>
@@ -83,17 +77,14 @@ function MovieListPage() {
 
     return (
         <div className='app-container'>
-            {
-                selectedMovie ? <MovieDetails movie={selectedMovie} onCloseMovieDetails={onCloseMovieDetails}></MovieDetails>
-                    : <SearchForm initialSearchTerm={INITAL_SEARCH_TERM} onChange={handleSearch} />
-            }
+            <Outlet />
             <div className="movie-genre-sort-by-container">
                 <div className='genreSelectContainer'>
-                    <GenreSelect genres={genres} selectedGenre={selectedGenre} onChange={handleGenreSelect} />
+                    <GenreSelect genres={genres} selectedGenre={searchParams.get('genre')} onChange={handleGenreSelect} />
                 </div>
                 <div></div>
                 <div className='sortByContainer'>
-                    <SortControl currentSelection={selectedSortby} handleSelectChange={handleSortChange} />
+                    <SortControl currentSelection={searchParams.get('sortBy')} handleSelectChange={handleSortChange} />
                 </div>
             </div>
 
@@ -104,14 +95,12 @@ function MovieListPage() {
                     <p className='movie-count'><b>{movieCount}</b> movies found</p>
                     <div className='movie-tile-container'>
                         {movieList.map((movie) => {
-                            return <MovieTile key={movie.id} movie={movie} onClick={onMovieClick} />;
+                            return <Link to={`/${movie.id}`}><MovieTile key={movie.id} movie={movie} onClick={onMovieClick} /></Link>;
                         })}
                     </div>
                 </div>) :
                 (<div>Loading...</div>)
             }
-            {/* <Dialog isOpen={isModalOpen} onClose={closeModal}> */}
-            {/* </Dialog> */}
         </div>
     );
 }

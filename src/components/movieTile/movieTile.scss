@@ -4,6 +4,7 @@
   max-width: 250px;
   cursor: pointer;
   position: relative;
+  color: $primary-color;
 }
 
 .movie-poster img {
@@ -15,6 +16,7 @@
   font-size: .8rem;
   opacity: .5;
   margin-top: .75em;
+  color: $primary-color
 }
 
 .movie-tile-details {
@@ -57,6 +59,7 @@
   border-radius: 4px;
   padding: 2px 10px;
   font-size: .75rem;
+  color: $primary-color
 }
 
 .delete-action {
