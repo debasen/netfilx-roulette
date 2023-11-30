@@ -28,12 +28,12 @@ function MovieListPage({ query }) {
         setSearchParams(searchParams);
     };
 
-    const onMovieClick = (movie) => {
+    const onMovieClick = (movieId) => {
+        navigate('/' + movieId);
         scrollToTop();
     }
 
-    const scrollToTop = (movieId) => {
-        navigate('/' + movieId);
+    const scrollToTop = () => {
         window.scrollTo({
             top: 0,
             behavior: 'smooth',
