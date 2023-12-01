@@ -1,14 +1,24 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Dialog from "../dialog/dialog";
 import { MovieForm } from "../movieForm/movieForm";
-import { useNavigate } from "react-router-dom";
+import { API_MOVIES_PATH } from "../../constants";
+
 
 export const AddMovieForm = () => {
   const [isOpen, setOpen] = useState(true);
   const navigate = useNavigate();
-  const addMovie = (movie) => {
-    console.log("To be implemented", movie);
-  }
+
+  const addMovie = async (postData) => {
+    try {
+      const response = await axios.post(API_MOVIES_PATH, postData);
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   const handleClose = () => {
     setOpen(false);
     navigate(-1);

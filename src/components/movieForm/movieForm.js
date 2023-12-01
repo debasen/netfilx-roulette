@@ -3,6 +3,44 @@ import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import './movieForm.scss';
 
+function convertPayload(payload) {
+  const convertedPayload = {};
+  Object.keys(payload).forEach(key => {
+    const value = payload[key];
+
+    switch (key) {
+      case 'tagline':
+        convertedPayload[key] = typeof value === 'string' ? value : "null";
+        break;
+      case 'vote_average':
+      case 'vote_count':
+        convertedPayload[key] =  value ? value : 0;
+        break;
+      case 'budget':
+        convertedPayload[key] =  value ? value : 0;
+        break;
+      case 'revenue':
+        convertedPayload[key] =  value ? value : 0;
+        break;
+      case 'releaseDate':
+        convertedPayload.release_date=value;
+          delete convertedPayload.releaseDate;
+          break;
+      case 'movieUrl':
+        convertedPayload.poster_path=value;
+          delete convertedPayload.movieUrl;
+          break;
+      case 'rating':
+        convertedPayload.vote_average=+value;
+          delete convertedPayload.rating;
+        break;
+      default:
+        convertedPayload[key] = value;
+    }
+  });
+  return convertedPayload;
+}
+
 export const MovieForm = ({ movie, onSubmit }) => {
 
   // Default values when no movie object is provided
@@ -27,7 +65,7 @@ export const MovieForm = ({ movie, onSubmit }) => {
     overview,
   } = movie || defaultValues;
 
-  const { register, handleSubmit, setValue, watch } = useForm({
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
     defaultValues: {
       title,
       releaseDate,
@@ -42,7 +80,7 @@ export const MovieForm = ({ movie, onSubmit }) => {
   const handleFormSubmit = (data) => {
     // Map selected genres back to an array of strings
     const selectedGenres = data.genres ? data.genres.map((option) => option.value) : [];
-    onSubmit({ ...data, genre: selectedGenres });
+    onSubmit(convertPayload({ ...data, genres: selectedGenres }));
   };
 
   // Use watch to get the selected genre value
@@ -61,9 +99,10 @@ export const MovieForm = ({ movie, onSubmit }) => {
               className="form-input form-placeholder"
               type="text"
               id="title"
-              {...register('title')}
+              {...register('title', { required: 'Title is required' })}
               placeholder="Enter the movie title"
             />
+            <span className='form-error-message'>{errors?.title?.message}</span>
           </div>
           <div className="form-field">
             <label className="form-label" htmlFor="releaseDate">
@@ -84,9 +123,13 @@ export const MovieForm = ({ movie, onSubmit }) => {
               className="form-input form-placeholder"
               type="text"
               id="movieUrl"
-              {...register('movieUrl')}
+              {...register('movieUrl', {
+                pattern: { value: /^(http|https):\/\/[^ "]+$/, message: 'Not a valid URL' },
+                required: 'Image URL is required'
+              })}
               placeholder="Enter the movie URL"
             />
+            <span className='form-error-message'>{errors?.movieUrl?.message}</span>
           </div>
           <div className="form-field">
             <label className="form-label" htmlFor="rating">
@@ -94,11 +137,19 @@ export const MovieForm = ({ movie, onSubmit }) => {
             </label>
             <input
               className="form-input form-placeholder"
-              type="text"
+              type="number"
               id="rating"
-              {...register('rating')}
+              step={.1}
+              {...register('rating',
+                {
+                  required: { value: true, message: 'Rating is required' },
+                  max: { value: 10, message: 'Allowed value is 0-10' },
+                  min: { value: 0, message: 'Allowed value is 0-10' }
+                })
+              }
               placeholder="Enter the movie rating"
             />
+            <span className='form-error-message'>{errors?.rating?.message}</span>
           </div>
           <div className="form-field">
             <label className="form-label" htmlFor="genre">
@@ -118,6 +169,10 @@ export const MovieForm = ({ movie, onSubmit }) => {
               value={selectedGenre} // Set the value prop to avoid the mentioned error
               onChange={(selectedOptions) => setValue('genres', selectedOptions)} // Update the genre value on change
             />
+            {
+              (!selectedGenre || selectedGenre.length) <1 && 
+              <span className='form-error-message'>Select at lease one genre to proceed</span>
+            }
           </div>
           <div className="form-field">
             <label className="form-label" htmlFor="runtime">
@@ -125,9 +180,13 @@ export const MovieForm = ({ movie, onSubmit }) => {
             </label>
             <input
               className="form-input form-placeholder"
-              type="text"
+              type="number"
               id="runtime"
-              {...register('runtime')}
+              step="1"
+              {...register('runtime', { required: 'Runtime is required' },
+                { min: 1, message: 'Allowed value is 0-1000' },
+                { max: 1, message: 'Allowed value is 0-1000' })
+              }
               placeholder="Enter the movie runtime"
             />
           </div>
@@ -140,9 +199,10 @@ export const MovieForm = ({ movie, onSubmit }) => {
             className="form-textarea form-placeholder"
             rows="4"
             id="overview"
-            {...register('overview')}
+            {...register('overview', { required: 'Overview is required' })}
             placeholder="Enter the movie overview"
           ></textarea>
+          <span className='form-error-message'>{errors?.overview?.message}</span>
         </div>
         <div className="form-action">
           <button className="form-reset-button" type="reset">

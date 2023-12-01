@@ -4,6 +4,7 @@ import SearchForm from './components/searchForm/searchForm';
 import { Route, Routes, useSearchParams } from 'react-router-dom';
 import MovieDetailsWrapper from './components/movieDetailsWrapper/movieDetailsWrapper';
 import { AddMovieForm } from './components/addMovieForm/addMovieForm';
+import { EditMovieForm } from './components/editMovieForm/editMovieForm';
 import './App.scss';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path='/new' element={<AddMovieForm />} />
         </Route>
         <Route path=":movieId" element={<MovieDetailsWrapper />} />
+        <Route path="/:movieId/edit" element={<EditMovieForm />} />
       </Route>
     </Routes>
   );

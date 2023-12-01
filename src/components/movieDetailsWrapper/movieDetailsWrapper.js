@@ -1,34 +1,32 @@
 
-import { useState,useEffect } from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import MovieDetails from '../movieDetails/movieDetails';
-import axios from 'axios'
+import { API_MOVIES_PATH } from '../../constants';
+
 const MovieDetailsWrapper = () => {
   const { movieId } = useParams();
-  const [movie, setMovie] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [movieState, setMovieState] = useState({ movie: null, loading: true, error: null });
   const navigate = useNavigate();
-  const getMoviesByIdUrl = 'http://localhost:4000/movies/';
-  console.log(movieId)
   useEffect(() => {
-    axios.get(getMoviesByIdUrl+movieId)
-        .then((response) => {
-            setMovie(response.data);
-            setLoading(false);
-        })
-        .catch((err) => {
-            setError(err);
-            setLoading(false);
-        });
+    axios.get(API_MOVIES_PATH + '/' + movieId)
+      .then((response) => {
+        setMovieState({ ...movieState, movie: response.data, loading: false });
+      })
+      .catch((err) => {
+        setMovieState({ ...movieState, error: err, loading: false });
+      });
   }, [movieId]);
   const onCloseMovieDetails = () => {
     navigate(-1);
-    }
-    if (error) {
-        return <div>Error: {error?.message}</div>
-    }
-  return !loading && !error &&<MovieDetails movie={movie} onCloseMovieDetails={onCloseMovieDetails}></MovieDetails>;
+  }
+  if (movieState.error) {
+    return <div>Error: {movieState.error?.message}</div>
+  }
+  return !movieState.loading
+    && !movieState.error
+    && <MovieDetails movie={movieState.movie} onCloseMovieDetails={onCloseMovieDetails}></MovieDetails>;
 }
 
 export default MovieDetailsWrapper;

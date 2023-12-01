@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios'
-import { useSearchParams, Outlet, useNavigate } from 'react-router-dom';
+import { useSearchParams, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import GenreSelect from '../../components/genreSelect/genreSelect';
 import MovieTile from '../../components/movieTile/movieTile';
 import SortControl from '../../components/sortControl/sortControl';
@@ -8,6 +8,7 @@ import './movieListPage.scss';
 
 function MovieListPage({ query }) {
     const navigate = useNavigate();
+    const location = useLocation();
     const [movieList, setMovieList] = useState([]);
     const [movieCount, setMovieCount] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -70,7 +71,13 @@ function MovieListPage({ query }) {
 
     useEffect(() => {
         getMovies();
-    }, [getMovies, searchParams, query]);
+    }, [getMovies]);
+
+    useEffect(() => {
+        console.log(location);
+        if(!location.pathname.match(/\b(?:new|edit|\d+)$/))
+            getMovies();
+    }, [getMovies, location]);
 
 
     if (error) {

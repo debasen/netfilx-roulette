@@ -59,19 +59,37 @@
         width: 100%;
     }
 
+    .form-error-message {
+        font-size: .8rem;
+        color: $icon-color;
+        margin-top: 6px;
+        display: inline-block;
+    }
+
     .form-placeholder::placeholder {
         color: #888;
     }
 
-    .form-select__multi-value{
+    .form-select__multi-value {
         background-color: $icon-color;
     }
-    .form-select__control{
+
+    .form-select__control {
         background-color: $dark-label-color;
         border: none;
         padding: 4px 0px;
     }
-    .form-select__menu{
+
+    .form-select__menu {
         background-color: $dark-label-color;
+    }
+
+    /*Remove arrows beside number field*/
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
     }
 }
