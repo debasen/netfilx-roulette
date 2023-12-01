@@ -14,6 +14,8 @@ export const AddMovieForm = () => {
     try {
       const response = await axios.post(API_MOVIES_PATH, postData);
       console.log('Response:', response.data);
+      setOpen(false);
+      navigate(`/${response.data.id}`);
     } catch (error) {
       console.error('Error:', error);
     }

@@ -34,6 +34,9 @@ function convertPayload(payload) {
         convertedPayload.vote_average=+value;
           delete convertedPayload.rating;
         break;
+      case 'runtime':
+        convertedPayload.runtime=+value;
+        break;
       default:
         convertedPayload[key] = value;
     }
@@ -50,7 +53,7 @@ export const MovieForm = ({ movie, onSubmit }) => {
     poster_path: '',
     vote_average: '',
     genres: ['Action'],
-    runtime: '',
+    runtime: null,
     overview: '',
   };
 
@@ -182,10 +185,10 @@ export const MovieForm = ({ movie, onSubmit }) => {
               className="form-input form-placeholder"
               type="number"
               id="runtime"
-              step="1"
+              step={1}
               {...register('runtime', { required: 'Runtime is required' },
                 { min: 1, message: 'Allowed value is 0-1000' },
-                { max: 1, message: 'Allowed value is 0-1000' })
+                { max: 1000, message: 'Allowed value is 0-1000' })
               }
               placeholder="Enter the movie runtime"
             />
