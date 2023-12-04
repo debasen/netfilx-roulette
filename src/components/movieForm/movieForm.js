@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
+import { GENRES } from '../../constants';
 import './movieForm.scss';
 
 function convertPayload(payload) {
@@ -80,6 +81,32 @@ export const MovieForm = ({ movie, onSubmit }) => {
     },
   });
 
+  const registerMovieUrl = () => {
+    return register('movieUrl', {
+      pattern: {
+        value: /^(http|https):\/\/[^ "]+$/,
+        message: 'Not a valid URL'
+      },
+      required: 'Image URL is required'
+    });
+  };
+
+  const registerRuntime = () => {
+    return register('runtime', {
+      required: 'Runtime is required',
+      min: { value: 1, message: 'Allowed value is 1-1000' },
+      max: { value: 1000, message: 'Allowed value is 1-1000' }
+    });
+  };
+
+  const registerRating = () => {
+    return register('rating', {
+      required: { value: true, message: 'Rating is required' },
+      max: { value: 10, message: 'Allowed value is 0-10' },
+      min: { value: 0, message: 'Allowed value is 0-10' }
+    });
+  };
+
   const handleFormSubmit = (data) => {
     // Map selected genres back to an array of strings
     const selectedGenres = data.genres ? data.genres.map((option) => option.value) : [];
@@ -126,10 +153,7 @@ export const MovieForm = ({ movie, onSubmit }) => {
               className="form-input form-placeholder"
               type="text"
               id="movieUrl"
-              {...register('movieUrl', {
-                pattern: { value: /^(http|https):\/\/[^ "]+$/, message: 'Not a valid URL' },
-                required: 'Image URL is required'
-              })}
+              {...registerMovieUrl()}
               placeholder="Enter the movie URL"
             />
             <span className='form-error-message'>{errors?.movieUrl?.message}</span>
@@ -139,17 +163,11 @@ export const MovieForm = ({ movie, onSubmit }) => {
               RATING
             </label>
             <input
-              className="form-input form-placeholder"
+              className="form-input form-placeholder no-arrow"
               type="number"
               id="rating"
               step={.1}
-              {...register('rating',
-                {
-                  required: { value: true, message: 'Rating is required' },
-                  max: { value: 10, message: 'Allowed value is 0-10' },
-                  min: { value: 0, message: 'Allowed value is 0-10' }
-                })
-              }
+              {...registerRating()}
               placeholder="Enter the movie rating"
             />
             <span className='form-error-message'>{errors?.rating?.message}</span>
@@ -161,13 +179,7 @@ export const MovieForm = ({ movie, onSubmit }) => {
             <Select
               classNamePrefix='form-select'
               {...register('genres', { required: true })} // Use register properly
-              options={[
-                { value: 'Action', label: 'Action' },
-                { value: 'Comedy', label: 'Comedy' },
-                { value: 'Drama', label: 'Drama' },
-                { value: 'Horror', label: 'Horror' },
-                { value: 'Science Fiction', label: 'Science Fiction' },
-              ]}
+              options={GENRES}
               isMulti
               value={selectedGenre} // Set the value prop to avoid the mentioned error
               onChange={(selectedOptions) => setValue('genres', selectedOptions)} // Update the genre value on change
@@ -182,14 +194,11 @@ export const MovieForm = ({ movie, onSubmit }) => {
               RUNTIME
             </label>
             <input
-              className="form-input form-placeholder"
+              className="form-input form-placeholder no-arrow"
               type="number"
               id="runtime"
               step={1}
-              {...register('runtime', { required: 'Runtime is required' },
-                { min: 1, message: 'Allowed value is 0-1000' },
-                { max: 1000, message: 'Allowed value is 0-1000' })
-              }
+              {...registerRuntime()}
               placeholder="Enter the movie runtime"
             />
           </div>
