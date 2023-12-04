@@ -1,19 +1,26 @@
 import { useState } from "react";
-import { AddMovie } from "../addMovie/addMovie";
+import { Outlet, useNavigate } from "react-router-dom";
 import './searchForm.scss';
 
-const SearchForm = (props) => {
-    let [searchedInput, setSearchedInput] = useState(props.initialSearchTerm);
+const SearchForm = ({initialSearchTerm, onChange}) => {
+    const [searchedInput, setSearchedInput] = useState(initialSearchTerm);
+    const navigate = useNavigate();
+
     const handleSearch = (e) => {
         setSearchedInput(e.target.value);
     };
     const handleSubmitSearch = (e) => {
         e.preventDefault();
-        props.onChange(searchedInput);
+        onChange(searchedInput);
     }
     return (
         <div className="search-container">
-            <AddMovie />
+            <button className="add-movie-button"
+                onClick={() => navigate('/new') }
+            >
+                + ADD MOVIE
+            </button>
+            <Outlet />
             <div className="search-banner">
             </div>
             <form className="search-form" onSubmit={handleSubmitSearch}>

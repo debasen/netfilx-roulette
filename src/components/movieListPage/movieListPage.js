@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios'
-import { useSearchParams, Outlet, Link } from 'react-router-dom';
+import { useSearchParams, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import GenreSelect from '../../components/genreSelect/genreSelect';
 import MovieTile from '../../components/movieTile/movieTile';
 import SortControl from '../../components/sortControl/sortControl';
 import './movieListPage.scss';
 
 function MovieListPage({ query }) {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [movieList, setMovieList] = useState([]);
     const [movieCount, setMovieCount] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -27,7 +29,8 @@ function MovieListPage({ query }) {
         setSearchParams(searchParams);
     };
 
-    const onMovieClick = (movie) => {
+    const onMovieClick = (movieId) => {
+        navigate('/' + movieId);
         scrollToTop();
     }
 
@@ -68,7 +71,13 @@ function MovieListPage({ query }) {
 
     useEffect(() => {
         getMovies();
-    }, [getMovies, searchParams, query]);
+    }, [getMovies]);
+
+    useEffect(() => {
+        console.log(location);
+        if(!location.pathname.match(/\b(?:new|edit|\d+)$/))
+            getMovies();
+    }, [getMovies, location]);
 
 
     if (error) {
@@ -95,7 +104,7 @@ function MovieListPage({ query }) {
                     <p className='movie-count'><b>{movieCount}</b> movies found</p>
                     <div className='movie-tile-container'>
                         {movieList.map((movie) => {
-                            return <Link to={`/${movie.id}`}><MovieTile key={movie.id} movie={movie} onClick={onMovieClick} /></Link>;
+                            return <MovieTile key={movie.id} movie={movie} onClick={() => onMovieClick(movie.id)} />;
                         })}
                     </div>
                 </div>) :

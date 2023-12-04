@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import './movieTile.scss';
+import { useNavigate } from 'react-router-dom';
 import Dialog from '../dialog/dialog';
-import { MovieForm } from '../movieForm/movieForm';
+import './movieTile.scss';
 
 const MovieTile = ({ movie, onClick }) => {
-    let { poster_path: imageUrl, title: movieName, release_date: releaseDate, genres } = movie;
+    let { poster_path: imageUrl, title: movieName, release_date: releaseDate, genres, id } = movie;
     const [showMenu, setShowMenu] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-
+    const navigate = useNavigate();
     const onMovieSelect = () => {
         onClick(movie)
     }
@@ -19,7 +18,7 @@ const MovieTile = ({ movie, onClick }) => {
 
     const handleEdit = (event) => {
         event.stopPropagation();
-        setShowEditModal(true);
+        navigate(`/${id}/edit`);
     }
 
     const handleDelete = (event) => {
@@ -27,9 +26,6 @@ const MovieTile = ({ movie, onClick }) => {
         setShowDeleteModal(true);
     }
 
-    const handleEditSubmit = (movie) => {
-        console.log("To be implemented", movie);
-    }
     const handleDeleteSubmit = () => {
         console.log("To be implemented");
     }
@@ -63,9 +59,7 @@ const MovieTile = ({ movie, onClick }) => {
                     </div>
                 </div>}
         </div>
-        <Dialog title='EDIT MOVIE' isOpen={showEditModal} onClose={() => setShowEditModal(false)} >
-            <MovieForm movie={movie} onSubmit={handleEditSubmit} />
-        </Dialog>
+
         <Dialog title='DELETE MOVIE' isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} >
             Are you sure you want to delete this movie?
             <div className="delete-action">

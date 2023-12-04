@@ -57,9 +57,41 @@
         padding: 14px;
         border-radius: 4px;
         width: 100%;
+
+
+        /*Remove arrows beside number field*/
+        &.no-arrow::-webkit-inner-spin-button,
+        &.no-arrow::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            margin: 0;
+        }
+    }
+
+    .form-error-message {
+        font-size: .8rem;
+        color: $icon-color;
+        margin-top: 6px;
+        display: inline-block;
     }
 
     .form-placeholder::placeholder {
         color: #888;
     }
+
+    .form-select__multi-value {
+        background-color: $icon-color;
+    }
+
+    .form-select__control {
+        background-color: $dark-label-color;
+        border: none;
+        padding: 4px 0px;
+    }
+
+    .form-select__menu {
+        background-color: $dark-label-color;
+    }
+
 }
