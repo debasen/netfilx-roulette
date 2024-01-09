@@ -1,12 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
 
   return {
-    entry: './src/index.js',
+    entry: './src/index.tsx',
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'bundle.js',
@@ -14,26 +13,29 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.tsx?$/,
+          use: 'ts-loader',
           exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-          },
         },
       ],
+    },
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js'],
     },
     plugins: [
       new HtmlWebpackPlugin({
         template: './public/index.html',
       }),
-      isProduction && new BundleAnalyzerPlugin(),
-    ].filter(Boolean),
+    ],
     devServer: {
-      static: path.join(__dirname, 'dist'),
+      static: {
+        directory: path.join(__dirname, 'dist'),
+      },
       port: 3000,
       open: true,
     },
     optimization: {
+      // Add optimization configurations for production build
     },
   };
 };
