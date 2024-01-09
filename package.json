@@ -6,21 +6,39 @@
   "scripts": {
     "start": "webpack serve --mode development --open",
     "build": "webpack --mode production",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
   },
   "devDependencies": {
-    "babel-loader": "^8.2.3",
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
+    "babel-loader": "^8.2.3",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-react": "^7.33.2",
     "html-webpack-plugin": "^5.3.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "webpack": "^5.51.1",
     "webpack-bundle-analyzer": "^4.4.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.1.0"
   },
   "dependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "npm run lint --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
